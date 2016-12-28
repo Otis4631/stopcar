@@ -2,7 +2,7 @@
 #define _CStack
 #include<iostream.h>
 template<class T>
-class CStack{  // LIFO 对象 、、test
+class CStack{  // LIFO 对象
 public :
     CStack(int MaxStackSize = 10);
     ~CStack () {delete [] stack;}
@@ -11,8 +11,6 @@ public :
 T Top() const;   //test
 CStack<T>& push(const T& x);
 CStack<T>& Delete(T& x);
-friend ostream& operator<<(ostream& out, const CStack<T>& w);
-
 private :
     int top; // 栈顶
     int MaxTop; // 最大的栈顶值
@@ -46,10 +44,4 @@ CStack<T>& CStack<T>::pop(T& x){// 删除栈顶元素，并将其送入x
         x = stack[top--];
         return *this;
     }
-}
-template <class T>
-ostream& operator<<(ostream& out, const CStack<T>& w){
-     for(int i=w.top;i>-1;i--)
-      out<<w.stack[i]<<" ";
-      return out;
 }
