@@ -1,6 +1,6 @@
-#ifndef _CStack
-#define _CStack
-#include<iostream.h>
+#ifndef __CSTACK_H__
+#define __CSTACK_H__
+#include<iostream>
 template<class T>
 class CStack{  // LIFO 对象
 public :
@@ -9,8 +9,8 @@ public :
     bool IsEmpty() const {return top == -1;}
     bool IsFull() const {return top == MaxTop ; }
 T Top() const;   //test
-CStack<T>& push(const T& x);
-CStack<T>& Delete(T& x);
+void Push(const T& x);
+void Pop(T& x);
 private :
     int top; // 栈顶
     int MaxTop; // 最大的栈顶值
@@ -29,19 +29,18 @@ T CStack<T>::Top() const{    // 返回栈顶元素
         return stack[top];
 }
 template<class T>
-CStack<T>& CStack<T>::push(const T& x){ //添加元素x
+void CStack<T>::Push(const T& x){ //添加元素x
     if (!IsFull())
     {
         stack[++top] = x;
-        return *this;
     }
 }
 
 template<class T>
-CStack<T>& CStack<T>::pop(T& x){// 删除栈顶元素，并将其送入x
+void CStack<T>::Pop(T& x){// 删除栈顶元素，并将其送入x
     if (!IsEmpty())
     {
         x = stack[top--];
-        return *this;
     }
 }
+#endif
