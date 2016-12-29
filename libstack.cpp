@@ -13,7 +13,7 @@ T CStack<T>::Top() const{    // 返回栈顶元素
 }
 
 template<class T>
-void CStack<T>::Push(const T& x){ //添加元素x
+void CStack<T>::Push(const T x){ //添加元素x
     if (!IsFull())
     {
         stack[++top] = x;
@@ -21,7 +21,20 @@ void CStack<T>::Push(const T& x){ //添加元素x
 }
 
 template<class T>
-void CStack<T>::Pop(T& x){// 删除栈顶元素，并将其送入x
+T CStack<T>::Pop(){// 删除栈顶元素，并将其送入x
     if (!IsEmpty())
-        x = stack[top--];
+        return stack[top--];
 }
+/*template<class T>
+bool CStack<T>::GetCarPos(int &x,int carNum){
+    int temp=top;
+    while(temp){
+        if(carNum == stack[top].CarNum){
+            x=temp;
+            return true;
+        }
+        temp--;
+    }
+    if(stack[temp]!=carNum)
+        return false;
+}*/

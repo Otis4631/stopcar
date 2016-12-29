@@ -3,7 +3,7 @@
 #include <iostream>
 
 using namespace std;
-typedef int Time;
+typedef double Time;
 typedef struct{
     char Cmd;
     int CarNum;
@@ -14,11 +14,11 @@ typedef struct StackNode{
     int CarNum;
     Time reach;
     Time leave;
-    struct StackNode *next;
+   // struct StackNode *next;
 }CarNode;  //每个汽车的信息
 
 
-void CarEntrance(CStack<CarNode> *Garage , CQueue<CarNode> *carQueue , int carNum , int time){
+void CarEntrance(CStack<CarNode> *Garage , CQueue<CarNode> *carQueue , int carNum , Time time){
     CarNode *car= new CarNode;
     if(!car){
         cout << "动态内存分配失败！\n";
@@ -27,24 +27,52 @@ void CarEntrance(CStack<CarNode> *Garage , CQueue<CarNode> *carQueue , int carNu
     car->reach = time;
     car->CarNum = carNum;
     if(!Garage->IsFull()){
-        Garage->push(car);
+        Garage->Push(*car);
         cout << "车已入库！\n";
     }
      else{
-        carQueue->push(car);
+        carQueue->Push(*car);
         cout << "车库已满，车进入便道。\n";
     }
 }
 
-void CarLeave(CStack<CarNode> *Garage,CStack<CarNode> *Temp,CQueue<CarNode> *carQueue,int carNum,int time ){
+void CarLeave(CStack<CarNode> *Garage,CStack<CarNode> *Temp,CQueue<CarNode> *carQueue,int carNum,Time time ){
     CarNode *car = new CarNode;
     if(!car){
         cout << "动态内存分配失败！\n";
         exit(0);
     }
-    Time leave = time;
-
+    car->CarNum = carNum;
+    car->leave = time;
+    while(!Garage.IsEmpty()){
+        if(Garage->Top().CarNum != car -> CarNum){
+            Temp->Push(Garage->Pop);    //车进入临时车道
+            if(Garage->IsEmpty())
+                cout << "没有该车牌的车！";
+        }
+        else{      // 获得车辆信息，并回归临时车道的车。
+             *car=Garage->Pop();
+             PrintInfo(car); // 打印车辆消费单
+             while(!Temp->IsEmpty()){   //回归临时车道的车。
+                Garage->Push(Temp->Pop());
+             }
+			 if(!carQueue->IsEmpty()){     //便道中一辆车进入车站。
+				Garage->push(carQueue->Pop());
+				cout << "车场有空位，便道第一辆车进入。\n";
+				break;                  // 车已经找到，退出循环。
+			 }     
+        }
+    }
 }
+
+void PrintInfo(CarNode car){
+	double cost = (car.leave - car.reach)*2.0;
+	cout << "车辆的号码\t进库时间\t离开时间\t车费（元）";
+	cout << car->CarNum << '\t' << car->reach << '\t' << car->leave << '\t' << cost << endl;	
+}
+
+
+
 
 
 
@@ -68,7 +96,7 @@ void Input (InputData *inputData){
             cout << "请输入车库命令，格式如下（命令，车牌号，入库或出库时间）" << endl;
             cout << "A(a)-入库\tD(d)-离开\t"<< endl;
             cin >> inputData->Cmd >> inputData->CarNum >> inputData->time;
-            if(inputData->Cmd!='A' && inputData->Cmd!='a' && inputData->Cmd!='D' && inputData->Cmd!='d' && inputData->Cmd!='E' && inputData!='e'){
+            if(inputData->Cmd!='A' && inputData->Cmd!='a' && inputData->Cmd!='D' && inputData->Cmd!='d' && inputData->Cmd!='E' && inputData->Cmd!='e'){
                 cout << "命令不正确，请重新输入！" << endl;
                 input_end_flag=0;
             }

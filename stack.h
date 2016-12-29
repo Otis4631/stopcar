@@ -9,8 +9,10 @@ public :
     bool IsEmpty() const {return top == -1;}
     bool IsFull() const {return top == MaxTop ; }
 T Top() const;   //test
-void Push(const T& x);
-void Pop(T& x);
+void Push(const T x);
+T Pop();
+//int GetCarPos(int &x,int carNum
+
 private :
     int top; // 栈顶
     int MaxTop; // 最大的栈顶值
