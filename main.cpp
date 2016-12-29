@@ -1,8 +1,11 @@
 #include "stack.h"
 #include "queue.h"
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
+
+
 typedef double Time;
 typedef struct{
     char Cmd;
@@ -10,7 +13,7 @@ typedef struct{
     Time time;
 }InputData;    //输入数据
 
-typedef struct StackNode{
+typedef struct{
     int CarNum;
     Time reach;
     Time leave;
@@ -36,6 +39,16 @@ void CarEntrance(CStack<CarNode> *Garage , CQueue<CarNode> *carQueue , int carNu
     }
 }
 
+void PrintCarInfo(CarNode car){
+	double cost = (car.leave - car.reach)*2.0;
+	cout << "车辆的号码\t进库时间\t离开时间\t车费（元）";
+	cout << car.CarNum << '\t' << car.reach << '\t' << car.leave << '\t' << cost << endl;
+}
+
+void PrintAmount(CStack<CarNode> *Garage,CStack<CarNode> *Temp,CQueue<CarNode> *carQueue){
+    cout << "当前车库中车的数量：" << Garage->GetCarAmount  << '\t' << "当前便道中车的数量:" << carQueue->GetCarAmount << '\t' <<  "当前临时车道中的数量：" << Temp->GetCarAmount << endl;
+}
+
 void CarLeave(CStack<CarNode> *Garage,CStack<CarNode> *Temp,CQueue<CarNode> *carQueue,int carNum,Time time ){
     CarNode *car = new CarNode;
     if(!car){
@@ -44,37 +57,26 @@ void CarLeave(CStack<CarNode> *Garage,CStack<CarNode> *Temp,CQueue<CarNode> *car
     }
     car->CarNum = carNum;
     car->leave = time;
-    while(!Garage.IsEmpty()){
+    while(!Garage->IsEmpty()){
         if(Garage->Top().CarNum != car -> CarNum){
-            Temp->Push(Garage->Pop);    //车进入临时车道
+            Temp->Push(Garage->Pop());    //车进入临时车道
             if(Garage->IsEmpty())
                 cout << "没有该车牌的车！";
         }
         else{      // 获得车辆信息，并回归临时车道的车。
-             *car=Garage->Pop();
-             PrintInfo(car); // 打印车辆消费单
+             *car = Garage->Pop();
+             PrintCarInfo(*car); // 打印车辆消费单
              while(!Temp->IsEmpty()){   //回归临时车道的车。
                 Garage->Push(Temp->Pop());
              }
 			 if(!carQueue->IsEmpty()){     //便道中一辆车进入车站。
-				Garage->push(carQueue->Pop());
+				Garage->Push(carQueue->Pop());
 				cout << "车场有空位，便道第一辆车进入。\n";
 				break;                  // 车已经找到，退出循环。
 			 }     
         }
     }
 }
-
-void PrintInfo(CarNode car){
-	double cost = (car.leave - car.reach)*2.0;
-	cout << "车辆的号码\t进库时间\t离开时间\t车费（元）";
-	cout << car->CarNum << '\t' << car->reach << '\t' << car->leave << '\t' << cost << endl;	
-}
-
-
-
-
-
 
 void Input (InputData *inputData){
     int max_size;
@@ -116,4 +118,9 @@ void Input (InputData *inputData){
             }
         }
     }
+}
+int main(){
+    InputData inputData;
+    Input(&inputData);
+    return 0;
 }

@@ -21,10 +21,15 @@ void CStack<T>::Push(const T x){ //添加元素x
 }
 
 template<class T>
-T CStack<T>::Pop(){// 删除栈顶元素，并将其送入x
+T CStack<T>::Pop(){// 删除栈顶元素，并返回其值。
     if (!IsEmpty())
         return stack[top--];
 }
+template <class T>
+int CStack<T>:: GetCarAmount(){
+    return top+1;
+}
+
 /*template<class T>
 bool CStack<T>::GetCarPos(int &x,int carNum){
     int temp=top;

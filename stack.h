@@ -1,6 +1,5 @@
-#ifndef __STACK_H__
-#define __STACK_H__
-#include<iostream>
+#ifndef  STACK_H
+#define  STACK_H
 template<class T>
 class CStack{  // LIFO 对象
 public :
@@ -11,6 +10,7 @@ public :
 T Top() const;   //test
 void Push(const T x);
 T Pop();
+int GetCarAmount();
 //int GetCarPos(int &x,int carNum
 
 private :

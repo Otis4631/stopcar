@@ -1,4 +1,5 @@
 #include "queue.h"
+#include <stdlib.h>
 template<class T>
 CQueue<T>::CQueue(int MaxQueueSize){     //类的构造函数
 	Base = new T[MaxQueueSize];
@@ -17,13 +18,14 @@ T CQueue<T> :: Top () const { //返回队头元素
 template<class T>
 void CQueue<T>::Push(const T x){ //队尾添加元素
         Base[rear] = x;
+        
 	rear = (rear + 1) % MaxSize; 
 }
 template<class T>
-void CQueue<T>::Pop(T& x){// 删除栈顶元素，并将其送入x
+T CQueue<T>::Pop(){// 删除栈顶元素，返回此元素。
     if (!IsEmpty())
     {
-        x = Base[front];
+        return Base[front];
 	front = (front + 1) % MaxSize;
     }
 }
@@ -32,3 +34,4 @@ template<class T>
 int CQueue<T> :: Size() const { 
 	return (rear - front + MaxSize) % MaxSize;
 }
+
